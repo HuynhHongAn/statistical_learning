@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Robo Home{% endblock %}
+
+{% block content %}
+{% for robot in robots %}
+<a href="/yolo/detect">
+    <div class='bg-light-green dib br3 pa3 ma2 grow'>
+    <img src="{{robot.image}}" alt='robots'/>
+    <div>
+        <h2>{{robot.name}}</h2>
+        <p>{{robot.description}}</p>
+    </div>
+</div>
+</a>
+
+{% endfor %}
+
+{% endblock %}

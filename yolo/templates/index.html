@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <link href="{% static 'css/tachyons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+
+    {% block style %} {% endblock %}
+
+    <link rel="icon" href="{% static 'img/24.218.243.24.png' %}">
+
+    <title>{% block title %}Robo{% endblock %}</title>
+</head>
+
+<body>
+<div id="sidebar">
+    {% block sidebar %}
+    <nav class="navbar navbar-inverse navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/yolo/home">ROBOs</a>
+            </div>
+            <ul class="nav navbar-nav">
+                {% block sidebar-links %}
+                <li class="active"><a href="/yolo/home">Home</a></li>
+                <li><a href="/yolo/detect">Detect</a></li>
+                {% endblock %}
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+</div>
+
+<div class="tc">
+    <h1 class="" style="margin-bottom: 30px">Robo &nbsp;Friends</h1>
+    <canvas id="bgCanvas"></canvas>
+    {% block content %}{% endblock %}
+</div>
+</body>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+<!--<script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>-->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/index.js' %}"></script>
+{% block script %} {% endblock %}
+</html>
