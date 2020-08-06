@@ -34,12 +34,21 @@ function getAlertMessage(type, message) {
     }
 }
 
+function appendAlert(alertContainer, alertComponent) {
+    alertContainer.append(alertComponent)
+
+    setTimeout(function (){
+        $(".alert").last().blur(500)
+    }, 5000)
+}
+
 $(document).ready(function () {
     $("#detect-form").submit(function (e) {
         e.preventDefault();
 
         const form = $(this);
         const url = form.attr('action');
+        const alertContainer = $("#alert-container")
 
         let fd = new FormData(document.getElementById("detect-form"));
         let files = $('#image-input')[0].files[0];
@@ -53,18 +62,16 @@ $(document).ready(function () {
             processData: false,
             success: function (data) {
                 if (data.error_message) {
-                    form.prepend(getAlertMessage("error", data.error_message))
+                    appendAlert(alertContainer, getAlertMessage("error", data.error_message))
                 } else {
-                    $(".alert").hide('bind', {}, 500)
-                    form.prepend(getAlertMessage("success", "detect image"))
-
+                    appendAlert(alertContainer, getAlertMessage("success", "detect image"))
                     $('#image-preview').attr('src', data.uploaded_file_url)
                 }
             },
             error: function (e) {
-                console.log(e)
-                form.prepend(getAlertMessage("error", e.message))
+                appendAlert(alertContainer, getAlertMessage("error", e.message))
             }
         });
     });
 });
+

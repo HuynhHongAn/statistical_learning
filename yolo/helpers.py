@@ -4,7 +4,7 @@ import cv2
 import time
 
 
-def load_modal():
+def load_yolo_coco_modal():
     yolo_coco_data_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yolo-coco-data')
 
     """
@@ -13,28 +13,13 @@ def load_modal():
     """
 
     # Loading COCO class labels from file
-    # Opening file
-    # Pay attention! If you're using Windows, yours path might looks like:
-    # r'yolo-coco-data\coco.names'
-    # or:
-    # 'yolo-coco-data\\coco.names'
     with open(yolo_coco_data_path + '/coco.names') as f:
         # Getting labels reading every line
         # and putting them into the list
         labels = [line.strip() for line in f]
 
-    # # Check point
-    # print('List with labels names:')
-    # print(labels)
-
     # Loading trained YOLO v3 Objects Detector
     # with the help of 'dnn' library from OpenCV
-    # Pay attention! If you're using Windows, yours paths might look like:
-    # r'yolo-coco-data\yolov3.cfg'
-    # r'yolo-coco-data\yolov3.weights'
-    # or:
-    # 'yolo-coco-data\\yolov3.cfg'
-    # 'yolo-coco-data\\yolov3.weights'
     network = cv2.dnn.readNetFromDarknet(yolo_coco_data_path + '/yolov3.cfg',
                                          yolo_coco_data_path + '/yolov3.weights')
 
@@ -42,17 +27,14 @@ def load_modal():
     layers_names_all = network.getLayerNames()
 
     # # Check point
-    print()
-    print(layers_names_all)
+    # print()
+    # print(layers_names_all)  # To show teacher that modal is loading
 
     # Getting only output layers' names that we need from YOLO v3 algorithm
     # with function that returns indexes of layers with unconnected outputs
     layers_names_output = \
         [layers_names_all[i[0] - 1] for i in network.getUnconnectedOutLayers()]
-
-    # # Check point
-    # print()
-    # print(layers_names_output)  # ['yolo_82', 'yolo_94', 'yolo_106']
+    # ['yolo_82', 'yolo_94', 'yolo_106']
 
     # Generating colours for representing every detected object
     # with function randint(low, high=None, size=None, dtype='l')
@@ -67,6 +49,9 @@ def load_modal():
 
 
 def detect_image(image_path, network, colours, layers_names_output, labels):
+    # Getting more info of detection
+    extra_info = {}
+
     # Setting minimum probability to eliminate weak predictions
     probability_minimum = 0.5
 
@@ -75,31 +60,13 @@ def detect_image(image_path, network, colours, layers_names_output, labels):
     threshold = 0.3
 
     """
-            Start of:
-            Reading input image
-            """
-
-    # Reading image with OpenCV library
-    # In this way image is opened already as numpy array
-    # WARNING! OpenCV by default reads images in BGR format
-    # Pay attention! If you're using Windows, the path might looks like:
-    # r'images\woman-working-in-the-office.jpg'
-    # or:
-    # 'images\\woman-working-in-the-office.jpg'
-    # image_BGR = cv2.imread('images/woman-working-in-the-office.jpg')
-
+    Start of:
+    Reading input image
+    """
     image_BGR = cv2.imread(image_path)
-
-    # # Check point
-    # # Showing image shape
-    print('Image shape:', image_BGR.shape)  # tuple of (511, 767, 3)
 
     # Getting spatial dimension of input image
     h, w = image_BGR.shape[:2]  # Slicing from tuple only first two elements
-
-    # # Check point
-    # # Showing height an width of image
-    # print('Image height={0} and width={1}'.format(h, w))  # 511 767
 
     """
     End of: 
@@ -120,16 +87,6 @@ def detect_image(image_path, network, colours, layers_names_output, labels):
     blob = cv2.dnn.blobFromImage(image_BGR, 1 / 255.0, (416, 416),
                                  swapRB=True, crop=False)
 
-    # Check point
-    print('Image shape:', image_BGR.shape)  # (511, 767, 3)
-    print('Blob shape:', blob.shape)  # (1, 3, 416, 416)
-
-    # Check point
-    # Showing blob image in OpenCV window
-    # Slicing blob image and transposing to make channels come at the end
-    blob_to_show = blob[0, :, :, :].transpose(1, 2, 0)
-    print(blob_to_show.shape)  # (416, 416, 3)
-
     """
     End of:
     Getting blob from input image
@@ -147,8 +104,7 @@ def detect_image(image_path, network, colours, layers_names_output, labels):
     output_from_network = network.forward(layers_names_output)
     end = time.time()
 
-    # Showing spent time for forward pass
-    print('Objects Detection took {:.5f} seconds'.format(end - start))
+    extra_info['detection_time'] = f"Objects Detection took {end - start:.5f} seconds"
 
     """
     End of:
@@ -286,3 +242,4 @@ def detect_image(image_path, network, colours, layers_names_output, labels):
     """
     # fs.save("detected-image", image_BGR)
     cv2.imwrite("media/detected-image.jpg", image_BGR)
+    return extra_info

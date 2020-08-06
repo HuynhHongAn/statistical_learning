@@ -10,32 +10,57 @@
 <li class="active"><a href="/yolo/detect">Detect</a></li>
 {% endblock %}
 
-
 {% block content %}
-<div class="container detect-container">
-    <form id="detect-form" action="/yolo/detect" method="post" enctype="multipart/form-data">
-        <!-- Security token -->
-        {% csrf_token %}
-        <div class="form-group">
-            {% if error_message %}
-            <div class="alert alert-danger alert-dismissible" role="alert" style="text-align: left">
-                <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
-                <strong>Error</strong> {{error_message}}
-            </div>
-            {% endif %}
-            <label for="image-input">Choose image</label>
-            <input type="file" name="image" accept="image/*" class="form-control-file" id="image-input"
-                   onchange="readURL(this);">
-        </div>
-        <div class="container image-container">
-            <img id="image-preview" src="{{uploaded_file_url}}" alt="your image"/>
-        </div>
-        <div class="container">
-            <button type="submit" class="btn btn-primary btn-lg">Detect</button>
-        </div>
-    </form>
+<div class="container">
+
 
 </div>
+
+<div class="container">
+    <div class="row">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#detect">Detect</a></li>
+            <li><a data-toggle="tab" href="#detail">More</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="detect" class="tab-pane fade in active">
+                <div class="detect-container">
+                    <form id="detect-form" action="/yolo/detect" method="post" enctype="multipart/form-data">
+                        <div id="alert-container" class="container">
+
+                        </div>
+
+
+                        <!-- Security token -->
+                        {% csrf_token %}
+                        <div class="form-group" style="margin: 0">
+                            {% if error_message %}
+                            <div class="alert alert-danger alert-dismissible" role="alert" style="text-align: left">
+                                <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></span>
+                                <strong>Error</strong> {{error_message}}
+                            </div>
+                            {% endif %}
+                            <label for="image-input">Choose image</label>
+                            <input type="file" name="image" accept="image/*" class="form-control-file" id="image-input"
+                                   onchange="readURL(this);">
+                        </div>
+                        <div class="container image-container">
+                            <img id="image-preview" src="" alt=""/>
+                        </div>
+                        <div class="container">
+                            <button type="submit" class="btn btn-warning" style="width: 300px; font-weight: bold">Detect</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="detail" class="tab-pane fade">
+                <p>Some content in menu 1.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block script %}

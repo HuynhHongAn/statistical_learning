@@ -1,11 +1,11 @@
 .image-container {
     text-align: center;
-    margin: 20px;
+    margin: 0 20px 20px 20px;
     height: 500px;
     padding: 20px;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
-    border-radius: 2px;
+    border-top: 1px solid slateblue;
+    border-bottom: 1px solid slateblue;
+    border-radius: 5px;
     background-color: rgba(255,255,255,0.1);
 }
 
@@ -20,7 +20,8 @@ label {
 	max-width: 300px;
 	margin: 0 auto;
 	background-color: slateblue;
-	border-radius: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
 	font-size: 1.2em;
 	line-height: 2.5em;
 	text-align: center;
@@ -28,6 +29,7 @@ label {
 
 label:hover {
 	background-color: cornflowerblue;
+    cursor: pointer;
 }
 
 label:active {
@@ -49,6 +51,28 @@ input {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 100vw;
 	overflow: hidden;
+}
+
+.nav-tabs a {
+    font-size: 1.3em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-tabs a:hover {
+    background-color: rgba(255,255,255,0.5);
+    color: black;
+    font-weight: bold;
+}
+
+.nav-tabs {
+    margin-bottom: 20px;
+}
+
+#alert-container {
+    position: absolute;
+    right: 0;
+    top: 55px;
+    max-width: 300px;
 }

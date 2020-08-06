@@ -15,25 +15,25 @@ def index(request):
 
 def home(request):
     return render(request, 'home.html', {
-            'robots': [
-                {
-                    "name": "Basizz",
-                    "image": "../static/img/1.png",
-                    "description": "Good at YOLO basic detection"
-                },
-                {
-                    "name": "Advancezz",
-                    "image": "../static/img/3.png",
-                    "description": "Good at traffic signs detection"
-                },
-            ]
-        })
+        'robots': [
+            {
+                "name": "Basizz",
+                "image": "../static/img/1.png",
+                "description": "Good at YOLO basic detection"
+            },
+            {
+                "name": "Advancezz",
+                "image": "../static/img/3.png",
+                "description": "Good at traffic signs detection"
+            },
+        ]
+    })
 
 
 def detect(request):
     global network, colours, layers_names_output, labels
     if request.method == 'GET':
-        network, colours, layers_names_output, labels = helpers.load_modal()
+        network, colours, layers_names_output, labels = helpers.load_yolo_coco_modal()
         return render(request, 'detect.html', {
             'uploaded_file_url': "../static/img/CP4.png"
         })
@@ -50,14 +50,16 @@ def detect(request):
             filename = fs.save(my_file.name, my_file)
             image_path = fs.path(filename)
 
-            helpers.detect_image(image_path, network, colours, layers_names_output, labels)
+            extra_info = helpers.detect_image(image_path, network, colours, layers_names_output, labels)
+            print(extra_info)
 
             fs.delete(filename)
 
             return JsonResponse({
+                'extra_info': extra_info,
                 'uploaded_file_url': "/media/detected-image.jpg"
             })
-    else :
+    else:
         return render(request, 'detect.html', {
             'uploaded_file_url': "../static/img/CP4.png"
         })
