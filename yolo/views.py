@@ -43,15 +43,30 @@ def detect(request):
                 'error_message': "Image is required",
                 'uploaded_file_url': "../static/img/CP4.png"
             })
+        elif request.POST['probability_minimum'] == "":
+            return JsonResponse({
+                'error_message': "Probability Minimum is required",
+                'uploaded_file_url': "../static/img/CP4.png"
+            })
+        elif request.POST['threshold'] == "":
+            return JsonResponse({
+                'error_message': "Threshold is required",
+                'uploaded_file_url': "../static/img/CP4.png"
+            })
         else:
-            print(request)
+            print(request.POST)
             my_file = request.FILES['image']
             fs = FileSystemStorage()
             filename = fs.save(my_file.name, my_file)
             image_path = fs.path(filename)
 
-            extra_info = helpers.detect_image(image_path, network, colours, layers_names_output, labels)
-            print(extra_info)
+            extra_info = helpers.detect_image(image_path,
+                                              float(request.POST['probability_minimum']),
+                                              float(request.POST['threshold']),
+                                              network,
+                                              colours,
+                                              layers_names_output,
+                                              labels)
 
             fs.delete(filename)
 

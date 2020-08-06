@@ -25,23 +25,33 @@
         <div class="tab-content">
             <div id="detect" class="tab-pane fade in active">
                 <div class="detect-container">
+                    <div id="alert-container" class="container">
+
+                    </div>
                     <form id="detect-form" action="/yolo/detect" method="post" enctype="multipart/form-data">
-                        <div id="alert-container" class="container">
-
-                        </div>
-
-
                         <!-- Security token -->
                         {% csrf_token %}
-                        <div class="form-group" style="margin: 0">
-                            {% if error_message %}
-                            <div class="alert alert-danger alert-dismissible" role="alert" style="text-align: left">
-                                <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">&times;</span></span>
-                                <strong>Error</strong> {{error_message}}
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="normal-label" for="probability_minimum">Probability
+                                            Minimum</label>
+                                        <input type="number" name="probability_minimum"
+                                               class="form-control" id="probability_minimum" step="0.01" value="0.5">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="normal-label" for="threshold">Threshold</label>
+                                        <input type="number" name="threshold" class="form-control" id="threshold" step="0.01" value="0.3">
+                                    </div>
+                                </div>
                             </div>
-                            {% endif %}
-                            <label for="image-input">Choose image</label>
+                        </div>
+
+                        <div class="form-group" style="margin: 0">
+                            <label class="image-input-label" for="image-input">Choose image</label>
                             <input type="file" name="image" accept="image/*" class="form-control-file" id="image-input"
                                    onchange="readURL(this);">
                         </div>
@@ -49,7 +59,9 @@
                             <img id="image-preview" src="" alt=""/>
                         </div>
                         <div class="container">
-                            <button type="submit" class="btn btn-warning" style="width: 300px; font-weight: bold">Detect</button>
+                            <button type="submit" class="btn btn-warning" style="width: 300px; font-weight: bold">
+                                Detect
+                            </button>
                         </div>
                     </form>
                 </div>

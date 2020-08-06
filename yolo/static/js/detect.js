@@ -16,33 +16,39 @@ function readURL(input) {
 }
 
 function getAlertMessage(type, message) {
+    const id = Math.floor(Math.random() * 10000) + 1
     switch (type) {
         case "success":
             return `
-				<div class="alert alert-success alert-dismissible" role="alert" style="text-align: left">
+				<div id="${id}" class="alert alert-success alert-dismissible" role="alert" style="text-align: left">
 					<span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
-					<strong>Successfully</strong> ${message}
+					${message}
 				</div>
 			`
         case "error":
             return `
-				 <div class="alert alert-danger alert-dismissible" role="alert" style="text-align: left">
+				 <div id="${id}" class="alert alert-danger alert-dismissible" role="alert" style="text-align: left">
 					<span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
-					<strong>Error</strong> ${message}
+					${message}
 				</div>
 			`
     }
 }
 
 function appendAlert(alertContainer, alertComponent) {
-    alertContainer.append(alertComponent)
+    const el = $(alertComponent)
+    alertContainer.append(el)
 
     setTimeout(function (){
-        $(".alert").last().blur(500)
+        el.fadeOut(500)
     }, 5000)
 }
 
 $(document).ready(function () {
+    setInterval(function (){
+        var alerts =
+        $(".alert").last().fadeOut(500)
+    }, 5000)
     $("#detect-form").submit(function (e) {
         e.preventDefault();
 
@@ -64,7 +70,7 @@ $(document).ready(function () {
                 if (data.error_message) {
                     appendAlert(alertContainer, getAlertMessage("error", data.error_message))
                 } else {
-                    appendAlert(alertContainer, getAlertMessage("success", "detect image"))
+                    appendAlert(alertContainer, getAlertMessage("success", "Successfully detect image"))
                     $('#image-preview').attr('src', data.uploaded_file_url)
                 }
             },

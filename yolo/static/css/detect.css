@@ -13,7 +13,7 @@
     height: 100%
 }
 
-label {
+label.image-input-label {
     color: white;
 	display: block;
 	width: 60vw;
@@ -27,16 +27,20 @@ label {
 	text-align: center;
 }
 
-label:hover {
+label.image-input-label:hover {
 	background-color: cornflowerblue;
     cursor: pointer;
 }
 
-label:active {
+label.image-input-label:active {
 	background-color: mediumaquamarine;
 }
 
-input {
+label.normal-label {
+    color: white;
+}
+
+input#image-input {
 	border: 0;
     clip: rect(1px, 1px, 1px, 1px);
     height: 1px;
@@ -75,4 +79,5 @@ input {
     right: 0;
     top: 55px;
     max-width: 300px;
+    z-index: 1000;
 }

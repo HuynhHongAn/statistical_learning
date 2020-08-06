@@ -48,16 +48,9 @@ def load_yolo_coco_modal():
     return network, colours, layers_names_output, labels
 
 
-def detect_image(image_path, network, colours, layers_names_output, labels):
+def detect_image(image_path, probability_minimum, threshold, network, colours, layers_names_output, labels):
     # Getting more info of detection
     extra_info = {}
-
-    # Setting minimum probability to eliminate weak predictions
-    probability_minimum = 0.5
-
-    # Setting threshold for filtering weak bounding boxes
-    # with non-maximum suppression
-    threshold = 0.3
 
     """
     Start of:
@@ -104,7 +97,7 @@ def detect_image(image_path, network, colours, layers_names_output, labels):
     output_from_network = network.forward(layers_names_output)
     end = time.time()
 
-    extra_info['detection_time'] = f"Objects Detection took {end - start:.5f} seconds"
+    extra_info['Detection Time:'] = f"{end - start:.5f} seconds"
 
     """
     End of:
@@ -230,16 +223,13 @@ def detect_image(image_path, network, colours, layers_names_output, labels):
             cv2.putText(image_BGR, text_box_current, (x_min, y_min - 5),
                         cv2.FONT_HERSHEY_COMPLEX, 0.7, colour_box_current, 2)
 
-    # Comparing how many objects where before non-maximum suppression
-    # and left after
-    print()
-    print('Total objects been detected:', len(bounding_boxes))
-    print('Number of objects left after non-maximum suppression:', counter - 1)
+    extra_info['Total objects been detected:'] = len(bounding_boxes)
+    extra_info['Number of objects left after non-maximum suppression:'] = counter - 1
 
     """
     End of:
     Drawing bounding boxes and labels
     """
-    # fs.save("detected-image", image_BGR)
+
     cv2.imwrite("media/detected-image.jpg", image_BGR)
     return extra_info
