@@ -5,7 +5,7 @@
 
 {% block content %}
 {% for robot in robots %}
-<a href="/yolo/detect">
+<a href="{{robot.url}}">
     <div class='bg-light-green dib br3 pa3 ma2 grow'>
     <img src="{{robot.image}}" alt='robots'/>
     <div>

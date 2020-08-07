@@ -6,7 +6,7 @@
     border-top: 1px solid slateblue;
     border-bottom: 1px solid slateblue;
     border-radius: 5px;
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .image-container img {
@@ -15,25 +15,25 @@
 
 label.image-input-label {
     color: white;
-	display: block;
-	width: 60vw;
-	max-width: 300px;
-	margin: 0 auto;
-	background-color: slateblue;
-	border-top-left-radius: 3px;
-	border-top-right-radius: 3px;
-	font-size: 1.2em;
-	line-height: 2.5em;
-	text-align: center;
+    display: block;
+    width: 60vw;
+    max-width: 300px;
+    margin: 0 auto;
+    background-color: slateblue;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    font-size: 1.2em;
+    line-height: 2.5em;
+    text-align: center;
 }
 
 label.image-input-label:hover {
-	background-color: cornflowerblue;
+    background-color: cornflowerblue;
     cursor: pointer;
 }
 
 label.image-input-label:active {
-	background-color: mediumaquamarine;
+    background-color: mediumaquamarine;
 }
 
 label.normal-label {
@@ -41,7 +41,7 @@ label.normal-label {
 }
 
 input#image-input {
-	border: 0;
+    border: 0;
     clip: rect(1px, 1px, 1px, 1px);
     height: 1px;
     margin: -1px;
@@ -52,10 +52,10 @@ input#image-input {
 }
 
 .detect-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .nav-tabs a {
@@ -65,7 +65,7 @@ input#image-input {
 }
 
 .nav-tabs a:hover {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     color: black;
     font-weight: bold;
 }
@@ -80,4 +80,37 @@ input#image-input {
     top: 55px;
     max-width: 300px;
     z-index: 1000;
+}
+
+div#detail th {
+    color: white;
+    text-align: center;
+    background-color: slateblue;
+
+}
+
+div#detail {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    border-top: 2px solid slateblue;
+}
+
+div#detail {
+    overflow-y: scroll;
+    height: 600px;
+    display: block;
+}
+
+div#detail table {
+    padding: 20px;
+}
+
+div#detail tr {
+    color: white;
+}
+
+div#detail tr td {
+    text-align: left;
+    font-size: 1.25em;
+    padding: 20px;
 }

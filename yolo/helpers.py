@@ -4,31 +4,45 @@ import cv2
 import time
 
 
-def load_yolo_coco_modal():
-    yolo_coco_data_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yolo-coco-data')
+def load_yolo_coco_modal(yolo_data_path):
+    print()
+    print("Loading model...")
+
+    names_path = ''
+    cfg_path = ''
+    weights_path = ''
 
     """
     Start of:
     Loading YOLO v3 network
     """
+    for current_dir, dirs, files in os.walk(yolo_data_path + '.'):
+        for f in files:
+            if f.endswith('.names'):
+                names_path = yolo_data_path + f
+            if f.endswith('.cfg'):
+                cfg_path = yolo_data_path + f
+            if f.endswith('weights'):
+                weights_path = yolo_data_path + f
 
     # Loading COCO class labels from file
-    with open(yolo_coco_data_path + '/coco.names') as f:
+    with open(names_path) as f:
         # Getting labels reading every line
         # and putting them into the list
         labels = [line.strip() for line in f]
 
     # Loading trained YOLO v3 Objects Detector
     # with the help of 'dnn' library from OpenCV
-    network = cv2.dnn.readNetFromDarknet(yolo_coco_data_path + '/yolov3.cfg',
-                                         yolo_coco_data_path + '/yolov3.weights')
+    network = cv2.dnn.readNetFromDarknet(cfg_path, weights_path)
 
     # Getting list with names of all layers from YOLO v3 network
     layers_names_all = network.getLayerNames()
 
     # # Check point
-    # print()
-    # print(layers_names_all)  # To show teacher that modal is loading
+    print()
+    print(layers_names_all)  # To show teacher that modal is loading
+    print()
+    print("Done!")
 
     # Getting only output layers' names that we need from YOLO v3 algorithm
     # with function that returns indexes of layers with unconnected outputs
@@ -97,7 +111,7 @@ def detect_image(image_path, probability_minimum, threshold, network, colours, l
     output_from_network = network.forward(layers_names_output)
     end = time.time()
 
-    extra_info['Detection Time:'] = f"{end - start:.5f} seconds"
+    extra_info['Detection time'] = f"{end - start:.5f} seconds"
 
     """
     End of:
@@ -186,13 +200,16 @@ def detect_image(image_path, probability_minimum, threshold, network, colours, l
 
     # Defining counter for detected objects
     counter = 1
+    object_label_list = []
 
     # Checking if there is at least one detected object after non-maximum suppression
     if len(results) > 0:
         # Going through indexes of results
         for i in results.flatten():
             # Showing labels of the detected objects
-            print('Object {0}: {1}'.format(counter, labels[int(class_numbers[i])]))
+            label = labels[int(class_numbers[i])]
+            if label not in object_label_list:
+                object_label_list.append(label)
 
             # Incrementing counter
             counter += 1
@@ -223,8 +240,9 @@ def detect_image(image_path, probability_minimum, threshold, network, colours, l
             cv2.putText(image_BGR, text_box_current, (x_min, y_min - 5),
                         cv2.FONT_HERSHEY_COMPLEX, 0.7, colour_box_current, 2)
 
-    extra_info['Total objects been detected:'] = len(bounding_boxes)
-    extra_info['Number of objects left after non-maximum suppression:'] = counter - 1
+    extra_info['Total objects been detected'] = len(bounding_boxes)
+    extra_info['Number of objects left after non-maximum suppression'] = counter - 1
+    extra_info['Objects detected'] = ",".join(object_label_list)
 
     """
     End of:

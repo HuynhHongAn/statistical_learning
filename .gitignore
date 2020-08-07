@@ -151,3 +151,4 @@ dmypy.json
 .DS_Store
 .idea
 yolo-coco-data
+yolo-ts-data

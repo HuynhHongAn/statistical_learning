@@ -72,6 +72,15 @@ $(document).ready(function () {
                 } else {
                     appendAlert(alertContainer, getAlertMessage("success", "Successfully detect image"))
                     $('#image-preview').attr('src', data.uploaded_file_url)
+
+                    $.each(data.extra_info, function (description, info) {
+                        $("div#detail table tbody").append(`
+                             <tr>
+                                <td>${description}</td>
+                                <td>${info}</td>
+                            </tr>
+                        `)
+                    })
                 }
             },
             error: function (e) {
