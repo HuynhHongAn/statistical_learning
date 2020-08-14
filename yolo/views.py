@@ -36,14 +36,15 @@ def home(request):
 
 
 def detect(request):
-    global network, colours, layers_names_output, labels
+    global network, layers_names_output, labels
     if request.method == 'GET':
         model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yolo-coco-data/')
+        print(model_path)
         model = request.GET.get('model', 'basic')
         if model == 'advanced':
             model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yolo-ts-data/')
 
-        network, colours, layers_names_output, labels = helpers.load_yolo_coco_modal(model_path)
+        network, layers_names_output, labels = helpers.load_yolo_coco_modal(model_path)
         return render(request, 'detect.html', {
             'uploaded_file_url': "../static/img/CP4.png"
         })
@@ -75,7 +76,6 @@ def detect(request):
                                               float(probability_minimum),
                                               float(threshold),
                                               network,
-                                              colours,
                                               layers_names_output,
                                               labels)
 

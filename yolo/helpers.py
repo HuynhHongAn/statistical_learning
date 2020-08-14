@@ -24,7 +24,12 @@ def load_yolo_coco_modal(yolo_data_path):
                 cfg_path = yolo_data_path + f
             if f.endswith('weights'):
                 weights_path = yolo_data_path + f
+            # if f.endswith('backup'):
+            #     weights_path = yolo_data_path + f
 
+    print(names_path)
+    print(cfg_path)
+    print(weights_path)
     # Loading COCO class labels from file
     with open(names_path) as f:
         # Getting labels reading every line
@@ -50,21 +55,21 @@ def load_yolo_coco_modal(yolo_data_path):
         [layers_names_all[i[0] - 1] for i in network.getUnconnectedOutLayers()]
     # ['yolo_82', 'yolo_94', 'yolo_106']
 
-    # Generating colours for representing every detected object
-    # with function randint(low, high=None, size=None, dtype='l')
-    colours = np.random.randint(0, 255, size=(len(labels), 3), dtype='uint8')
-
     """
     End of:
     Loading YOLO v3 network
     """
 
-    return network, colours, layers_names_output, labels
+    return network, layers_names_output, labels
 
 
-def detect_image(image_path, probability_minimum, threshold, network, colours, layers_names_output, labels):
+def detect_image(image_path, probability_minimum, threshold, network, layers_names_output, labels):
     # Getting more info of detection
     extra_info = {}
+
+    # Generating colours for representing every detected object
+    # with function randint(low, high=None, size=None, dtype='l')
+    colours = np.random.randint(0, 255, size=(len(labels), 3), dtype='uint8')
 
     """
     Start of:
@@ -201,6 +206,7 @@ def detect_image(image_path, probability_minimum, threshold, network, colours, l
     # Defining counter for detected objects
     counter = 1
     object_label_list = []
+    text_box_currents = []
 
     # Checking if there is at least one detected object after non-maximum suppression
     if len(results) > 0:
@@ -235,6 +241,7 @@ def detect_image(image_path, probability_minimum, threshold, network, colours, l
             # Preparing text with label and confidence for current bounding box
             text_box_current = '{}: {:.4f}'.format(labels[int(class_numbers[i])],
                                                    confidences[i])
+            text_box_currents.append("(" + text_box_current + ")")
 
             # Putting text with label and confidence on the original image
             cv2.putText(image_BGR, text_box_current, (x_min, y_min - 5),
@@ -242,7 +249,8 @@ def detect_image(image_path, probability_minimum, threshold, network, colours, l
 
     extra_info['Total objects been detected'] = len(bounding_boxes)
     extra_info['Number of objects left after non-maximum suppression'] = counter - 1
-    extra_info['Objects detected'] = ",".join(object_label_list)
+    extra_info['Object types'] = ", ".join(object_label_list)
+    extra_info['All detections'] = ", ".join(text_box_currents)
 
     """
     End of:
@@ -250,4 +258,5 @@ def detect_image(image_path, probability_minimum, threshold, network, colours, l
     """
 
     cv2.imwrite("media/detected-image.jpg", image_BGR)
+
     return extra_info

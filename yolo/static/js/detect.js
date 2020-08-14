@@ -6,6 +6,7 @@ function readURL(input) {
 
         reader.onload = function (e) {
             $('#image-preview')
+                .attr('src', "")
                 .attr('src', e.target.result)
         };
 
@@ -71,10 +72,11 @@ $(document).ready(function () {
                     appendAlert(alertContainer, getAlertMessage("error", data.error_message))
                 } else {
                     appendAlert(alertContainer, getAlertMessage("success", "Successfully detect image"))
-                    $('#image-preview').attr('src', data.uploaded_file_url)
+                    $('#image-preview').attr('src', data.uploaded_file_url + "?ver=" + Date.now())
 
+                    $("div#more table tbody").empty()
                     $.each(data.extra_info, function (description, info) {
-                        $("div#detail table tbody").append(`
+                        $("div#more table tbody").append(`
                              <tr>
                                 <td>${description}</td>
                                 <td>${info}</td>
